@@ -7,24 +7,38 @@
 //
 
 import UIKit
+import CoreBluetooth
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView:UITableView!
     
+    //BLE
+    var centralManager : CBCentralManager!
+    var ECGsensorPeripheral : CBPeripheral!
+
     let BLEdevices = [
         ("ECG Sensor 1","BA12-A456-799A-1111"),
         ("ECG Sensor 2","BA12-A456-799A-1112"),
         ("EMG Sensor 1","BA12-A456-799A-1113"),
         ("EMG Sensor 2","BA12-A456-799A-1114") ]
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        self.tableView.addSubview(self.refreshControl)
+        centralManager = CBCentralManager(delegate: self, queue: nil)
+    }
+    
+    // pull to refresh controller
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
         
         return refreshControl
     }()
-
+    
+    // Table Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -46,6 +60,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
+    // pull to refresh
     func handleRefresh(refreshControl: UIRefreshControl) {
         // Do some reloading of data and update the table view's data source
         // Fetch more objects from a web service, for example...
@@ -53,11 +68,68 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.reloadData()
         refreshControl.endRefreshing()
     }
+    /******* CBCentralManagerDelegate *******/
+     
+     // Check status of BLE hardware
+    func centralManagerDidUpdateState(central: CBCentralManager) {
+        if central.state == CBCentralManagerState.PoweredOn {
+            // Scan for peripherals if BLE is turned on
+            central.scanForPeripheralsWithServices(nil, options: nil)
+        }
+        else {
+            // Can have different conditions for all states if needed - show generic alert for now
+            print("Error: Bluetooth switched off or not initialized")
+        }
+    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.tableView.addSubview(self.refreshControl)
+    
+    // Check out the discovered peripherals to find Sensor Tag
+    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+        print("Found device: ",advertisementData)
+    }
+    
+    // Discover services of the peripheral
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        print("Discovering peripheral services")
+        peripheral.discoverServices(nil)
+    }
+    
+    
+    // If disconnected, start searching again
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        print("Disconnected")
+        central.scanForPeripheralsWithServices(nil, options: nil)
+    }
+    
+    /******* CBCentralPeripheralDelegate *******/
+     
+     // Check if the service discovered is valid i.e. one of the following:
+     // IR Temperature Service
+     // Accelerometer Service
+     // Humidity Service
+     // Magnetometer Service
+     // Barometer Service
+     // Gyroscope Service
+     // (Others are not implemented)
+    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+        print("Looking at peripheral services")
+    }
+    
+    
+    // Enable notification and sensor for each characteristic of valid service
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        
+        print("Enabling sensors")
+        
+    }
+    
+    
+    
+    // Get data values when they are updated
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        
+        print("Connected")
+        
     }
 
     override func didReceiveMemoryWarning() {
