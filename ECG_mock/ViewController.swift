@@ -17,11 +17,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var centralManager : CBCentralManager!
     var ECGsensorPeripheral : CBPeripheral!
 
-    let BLEdevices = [
-        ("ECG Sensor 1","BA12-A456-799A-1111"),
-        ("ECG Sensor 2","BA12-A456-799A-1112"),
-        ("EMG Sensor 1","BA12-A456-799A-1113"),
-        ("EMG Sensor 2","BA12-A456-799A-1114") ]
+    var BLEdevices = [CBPeripheral]()
+    var refreshTimer: NSTimer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,9 +47,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
         
-        let (BLEname, uuid) = BLEdevices[indexPath.row]
-        cell.textLabel?.text = BLEname
-        cell.detailTextLabel?.text = uuid
+        if let BLEname = BLEdevices[indexPath.row].name {
+            cell.textLabel?.text = BLEname
+        }
         
         let myImage = UIImage(named: "Cell_Icons")
         cell.imageView?.image = myImage
@@ -64,17 +61,25 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func handleRefresh(refreshControl: UIRefreshControl) {
         // Do some reloading of data and update the table view's data source
         // Fetch more objects from a web service, for example...
-        
+        print("Scanning...")
+        BLEdevices.removeAll()
+        centralManager.scanForPeripheralsWithServices(nil, options: nil)
+        refreshTimer=NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "afterScanning",userInfo: nil, repeats: false)
+    }
+    
+    func afterScanning() {
+        print("finished scanning")
+        centralManager.stopScan()
         self.tableView.reloadData()
         refreshControl.endRefreshing()
     }
+    
     /******* CBCentralManagerDelegate *******/
      
      // Check status of BLE hardware
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == CBCentralManagerState.PoweredOn {
-            // Scan for peripherals if BLE is turned on
-            central.scanForPeripheralsWithServices(nil, options: nil)
+            print("Central Manager is Powered on...")
         }
         else {
             // Can have different conditions for all states if needed - show generic alert for now
@@ -82,10 +87,17 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    
     // Check out the discovered peripherals to find Sensor Tag
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Found device: ",advertisementData)
+        if let name=peripheral.name {
+            print("device name: \(name)")
+        }
+        // add peripheral to BLE devices array if not already in there
+        if !BLEdevices.contains(peripheral) {
+            BLEdevices.append(peripheral)
+            self.tableView.reloadData()
+        }
     }
     
     // Discover services of the peripheral
