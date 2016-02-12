@@ -11,6 +11,9 @@ import CoreBluetooth
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, UITableViewDataSource, UITableViewDelegate {
     
+    let kBLESensorServiceUUIDString = "92F4B880-31B5-11E3-9C7D-0002A5D5C51B"
+    let kBLESensorCharacteristicDataString = "C7BC60E0-31B5-11E3-9389-0002A5D5C51B"
+
     @IBOutlet weak var tableView:UITableView!
     
     //BLE
@@ -90,13 +93,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // Check out the discovered peripherals to find Sensor Tag
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Found device: ",advertisementData)
-        if let name=peripheral.name {
-            print("device name: \(name)")
-        }
-        // add peripheral to BLE devices array if not already in there
-        if !BLEdevices.contains(peripheral) {
-            BLEdevices.append(peripheral)
-            self.tableView.reloadData()
+        if let nameOfDeviceFound = (advertisementData as NSDictionary).objectForKey(CBAdvertisementDataLocalNameKey) as? NSString {
+            if (nameOfDeviceFound.hasPrefix("ECG-Sensor")) {
+                // add peripheral to BLE devices array if not already in there
+                if !BLEdevices.contains(peripheral) {
+                    BLEdevices.append(peripheral)
+                    self.tableView.reloadData()
+                }
+            }
+
         }
     }
     
@@ -134,8 +139,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         print("Enabling sensors")
         
     }
-    
-    
     
     // Get data values when they are updated
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
