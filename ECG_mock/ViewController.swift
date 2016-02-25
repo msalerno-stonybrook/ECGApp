@@ -60,6 +60,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         return cell
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        let ECGViewer=segue.destinationViewController as! ECGViewController
+        ECGViewer.ECGsensor=ECGsensorPeripheral
+    }
+    
     // pull to refresh
     func handleRefresh(refreshControl: UIRefreshControl) {
         // Do some reloading of data and update the table view's data source

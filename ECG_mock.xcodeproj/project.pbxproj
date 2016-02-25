@@ -12,6 +12,7 @@
 		F100F0291C56BFBE0050D285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F100F0271C56BFBE0050D285 /* Main.storyboard */; };
 		F100F02B1C56BFBE0050D285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F100F02A1C56BFBE0050D285 /* Assets.xcassets */; };
 		F100F02E1C56BFBE0050D285 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F100F02C1C56BFBE0050D285 /* LaunchScreen.storyboard */; };
+		F1ADBC431C7D17F000F91E52 /* ECGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		F100F02A1C56BFBE0050D285 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F100F02D1C56BFBE0050D285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F100F02F1C56BFBE0050D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECGViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				F100F0231C56BFBE0050D285 /* AppDelegate.swift */,
 				F100F0251C56BFBE0050D285 /* ViewController.swift */,
 				F100F0271C56BFBE0050D285 /* Main.storyboard */,
+				F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */,
 				F100F02A1C56BFBE0050D285 /* Assets.xcassets */,
 				F100F02C1C56BFBE0050D285 /* LaunchScreen.storyboard */,
 				F100F02F1C56BFBE0050D285 /* Info.plist */,
@@ -137,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F100F0261C56BFBE0050D285 /* ViewController.swift in Sources */,
+				F1ADBC431C7D17F000F91E52 /* ECGViewController.swift in Sources */,
 				F100F0241C56BFBE0050D285 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,7 +258,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.streylab.ECG-mock";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "a10fb918-5b9b-4130-bd25-4aa3dce1a4ed";
 			};
 			name = Debug;
 		};
@@ -268,7 +272,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.streylab.ECG-mock";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "a10fb918-5b9b-4130-bd25-4aa3dce1a4ed";
 			};
 			name = Release;
 		};

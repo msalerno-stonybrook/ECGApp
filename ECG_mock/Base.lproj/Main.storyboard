@@ -68,7 +68,7 @@
         <!--View Controller-->
         <scene sceneID="Bbk-Pi-XcB">
             <objects>
-                <viewController id="500-ym-NHW" sceneMemberID="viewController">
+                <viewController id="500-ym-NHW" customClass="ECGViewController" customModule="ECG_mock" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ogs-ga-Xbh"/>
                         <viewControllerLayoutGuide type="bottom" id="Div-wk-1gc"/>
@@ -76,7 +76,22 @@
                     <view key="view" contentMode="scaleToFill" id="Gso-yT-G8c">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A8Y-wB-3ag">
+                                <rect key="frame" x="177" y="237" width="300" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="FV3-DW-R9z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="top" secondItem="Ogs-ga-Xbh" secondAttribute="bottom" constant="217" id="ZUJ-Qh-hbL"/>
+                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="leading" secondItem="Gso-yT-G8c" secondAttribute="leading" constant="177" id="deD-5g-XYM"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QTI-DA-68Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
