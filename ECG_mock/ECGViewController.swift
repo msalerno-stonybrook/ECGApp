@@ -12,6 +12,7 @@ import CoreBluetooth
 class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
     
     var ECGsensor : CBPeripheral!
+    var CBManager : CBCentralManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,5 +48,12 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             print("Error: Bluetooth switched off or not initialized")
         }
     }
-
+    
+    // If disconnected, start searching again
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        print("Disconnected")
+        // go back to table view controller when disconnected
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
 }

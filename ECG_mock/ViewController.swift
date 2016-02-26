@@ -64,7 +64,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         let ECGViewer=segue.destinationViewController as! ECGViewController
-        ECGViewer.ECGsensor=ECGsensorPeripheral
+        
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+            // pass the peripheral that was selected to new view controller
+            ECGViewer.ECGsensor=BLEdevices[indexPath.row]
+        }
+        // also pass central manager in case it changes status
+        ECGViewer.CBManager=centralManager
     }
     
     // pull to refresh
@@ -117,7 +123,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         print("Discovering peripheral services")
         peripheral.discoverServices(nil)
     }
-    
     
     // If disconnected, start searching again
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
