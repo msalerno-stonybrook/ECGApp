@@ -11,6 +11,8 @@ import CoreBluetooth
 
 class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
     
+    @IBOutlet weak var dataLabel: UILabel!
+    
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
     let kBLESensorServiceUUID = CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B")

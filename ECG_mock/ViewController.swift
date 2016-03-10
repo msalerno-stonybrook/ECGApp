@@ -165,7 +165,16 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    @IBAction func unwindToBLEtable(unwindSegue: UIStoryboardSegue) {
+        print("pressed Disconnect")
+        centralManager.delegate = self
+        // need to set the delegate back to previous view controller
+        if let SourceController = unwindSegue.sourceViewController as? ECGViewController {
+            print("cancel connection to BLEsensor")
+            centralManager.cancelPeripheralConnection(SourceController.ECGsensor)
+        }
+    }
+    
 }
 
