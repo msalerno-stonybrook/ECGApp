@@ -13,10 +13,15 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
+    let kBLESensorServiceUUID = CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B")
+    let kBLESensorCharacteristicDataUUID = CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B")
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // when view loads connect to peripheral that was selected
+        print("ECG View loads")
+        CBManager.delegate = self
+        CBManager.connectPeripheral(ECGsensor, options: nil)
         // Do any additional setup after loading the view.
     }
 
@@ -24,7 +29,6 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     /*
     // MARK: - Navigation
@@ -49,11 +53,63 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         }
     }
     
+    // Discover services of the peripheral
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        print("Discovering peripheral services")
+        ECGsensor = peripheral
+        ECGsensor.delegate = self
+        ECGsensor.discoverServices(nil)
+    }
+    
     // If disconnected, start searching again
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         print("Disconnected")
         // go back to table view controller when disconnected
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    /******* CBCentralPeripheralDelegate *******/
     
+    // once connected the peripheral is reporting back with services
+    // check whether BLESensorService exists and if yes then discover its characteristics
+    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+        print("connected...")
+        print("found services")
+        for service in peripheral.services! {
+            let thisService = service as CBService
+            print("found service")
+            if thisService.UUID == kBLESensorServiceUUID {
+                // is any of the services the BLESensor service?
+                print("found ECGSensor service!")
+                peripheral.discoverCharacteristics(nil, forService: thisService)
+            }
+        }
+
+    }
+    
+    // this function is called when the device returns discovered characteristics
+    // set to notify if the proper characteristic is found
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        print("found characteristic")
+        for charateristic in service.characteristics! {
+            let thisCharacteristic = charateristic as CBCharacteristic
+            if thisCharacteristic.UUID == kBLESensorCharacteristicDataUUID {
+                // Enable Sensor Notification
+                peripheral.setNotifyValue(true, forCharacteristic: thisCharacteristic)
+            }
+        }
+        
+    }
+    
+    // this function is called then a characteristic was updated
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        
+        print("got some data...")
+        
+        if characteristic.UUID == kBLESensorCharacteristicDataUUID {
+            print("got BLE sensor data")
+        }
+    }
+
+
+
 }

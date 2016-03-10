@@ -71,6 +71,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         // also pass central manager in case it changes status
         ECGViewer.CBManager=centralManager
+        ECGViewer.CBManager.delegate = ECGViewController.self as? CBCentralManagerDelegate
     }
     
     // pull to refresh
@@ -118,11 +119,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    // Discover services of the peripheral
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        print("Discovering peripheral services")
-        peripheral.discoverServices(nil)
-    }
+//    // Discover services of the peripheral
+//    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+//        print("Discovering peripheral services")
+//        peripheral.discoverServices(nil)
+//    }
+//
     
     // If disconnected, start searching again
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
