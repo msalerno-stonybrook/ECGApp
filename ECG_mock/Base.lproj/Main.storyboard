@@ -79,10 +79,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A8Y-wB-3ag">
-                                <rect key="frame" x="177" y="237" width="300" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="FV3-DW-R9z"/>
-                                </constraints>
+                                <rect key="frame" x="20" y="237" width="560" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -101,9 +98,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="28w-N1-4M0" secondAttribute="bottom" constant="20" symbolic="YES" id="FaK-YI-xig"/>
-                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="top" secondItem="Ogs-ga-Xbh" secondAttribute="bottom" constant="217" id="ZUJ-Qh-hbL"/>
-                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="leading" secondItem="Gso-yT-G8c" secondAttribute="leading" constant="177" id="deD-5g-XYM"/>
+                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="top" secondItem="Ogs-ga-Xbh" secondAttribute="bottom" constant="217" id="bmS-hf-AnO"/>
                             <constraint firstItem="28w-N1-4M0" firstAttribute="leading" secondItem="Gso-yT-G8c" secondAttribute="leadingMargin" id="qBe-2Q-iuj"/>
+                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="trailing" secondItem="Gso-yT-G8c" secondAttribute="trailingMargin" id="sQT-s1-1RT"/>
+                            <constraint firstItem="A8Y-wB-3ag" firstAttribute="leading" secondItem="28w-N1-4M0" secondAttribute="leading" id="wYu-Vd-uub"/>
                         </constraints>
                     </view>
                     <connections>

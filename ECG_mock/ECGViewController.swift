@@ -109,6 +109,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         
         if characteristic.UUID == kBLESensorCharacteristicDataUUID {
             print("got BLE sensor data")
+            dataLabel.text = characteristic.value!.hexadecimalString as String
+            
         }
     }
 
