@@ -15,8 +15,10 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
-    let kBLESensorServiceUUID = CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B")
-    let kBLESensorCharacteristicDataUUID = CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B")
+//    let kBLESensorServiceUUID = CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B")
+//    let kBLESensorCharacteristicDataUUID = CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B")
+    let kBLESensorServiceUUID = CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9")
+    let kBLESensorCharacteristicDataUUID = CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +80,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         print("found services")
         for service in peripheral.services! {
             let thisService = service as CBService
-            print("found service")
+            print("found service \(thisService.UUID)")
             if thisService.UUID == kBLESensorServiceUUID {
                 // is any of the services the BLESensor service?
                 print("found ECGSensor service!")
@@ -91,9 +93,9 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     // this function is called when the device returns discovered characteristics
     // set to notify if the proper characteristic is found
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
-        print("found characteristic")
         for charateristic in service.characteristics! {
             let thisCharacteristic = charateristic as CBCharacteristic
+            print("found characteristic \(thisCharacteristic.UUID)")
             if thisCharacteristic.UUID == kBLESensorCharacteristicDataUUID {
                 // Enable Sensor Notification
                 peripheral.setNotifyValue(true, forCharacteristic: thisCharacteristic)
