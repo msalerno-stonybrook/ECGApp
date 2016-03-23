@@ -18,6 +18,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     var CBManager : CBCentralManager!
     let ServicesList = [CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B"),CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9")]
     let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3")]
+    
+    var data = [Int]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,11 +109,20 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     // this function is called then a characteristic was updated
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         
-        print("got some data...")
-        
         if CharacteristicsList.contains(characteristic.UUID) {
             print("got BLE sensor data")
-            dataLabel.text = characteristic.value!.hexadecimalString as String
+            let dataReceived = characteristic.value!
+            dataLabel.text = dataReceived.hexadecimalString as String
+            
+            var bytes = [UInt8](count: dataReceived.length, repeatedValue: 0)
+            dataReceived.getBytes(&bytes, length: dataReceived.length)
+
+            for index in 0...dataReceived.length/2-1 {
+                let dataPoint = Int(bytes[index*2])+Int(bytes[index*2+1])*256
+                data.append(dataPoint)
+                print("appended \(dataPoint)")
+            }
+            
             plotView.setNeedsDisplay()            
         }
     }
