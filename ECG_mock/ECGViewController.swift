@@ -9,9 +9,10 @@
 import UIKit
 import CoreBluetooth
 
-class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
+class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManagerDelegate, ECGDataSource {
     
     @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var plotView: PlotView!
     
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
@@ -24,6 +25,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         print("ECG View loads")
         CBManager.delegate = self
         CBManager.connectPeripheral(ECGsensor, options: nil)
+        plotView.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -110,10 +112,12 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         if CharacteristicsList.contains(characteristic.UUID) {
             print("got BLE sensor data")
             dataLabel.text = characteristic.value!.hexadecimalString as String
-            
+            plotView.setNeedsDisplay()            
         }
     }
 
-
+    func dataYforWidth(width: Int) -> [Int] {
+        return [1,2,3]
+    }
 
 }

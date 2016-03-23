@@ -13,6 +13,7 @@
 		F100F02B1C56BFBE0050D285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F100F02A1C56BFBE0050D285 /* Assets.xcassets */; };
 		F100F02E1C56BFBE0050D285 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F100F02C1C56BFBE0050D285 /* LaunchScreen.storyboard */; };
 		F10F3B7C1C91F80300443A7E /* NSData_hexadecimalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F3B7B1C91F80300443A7E /* NSData_hexadecimalString.swift */; };
+		F12F0B291CA319B2009AF2C3 /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12F0B281CA319B2009AF2C3 /* PlotView.swift */; };
 		F1ADBC431C7D17F000F91E52 /* ECGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		F100F02D1C56BFBE0050D285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F100F02F1C56BFBE0050D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F10F3B7B1C91F80300443A7E /* NSData_hexadecimalString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSData_hexadecimalString.swift; sourceTree = "<group>"; };
+		F12F0B281CA319B2009AF2C3 /* PlotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlotView.swift; sourceTree = "<group>"; };
 		F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECGViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 				F100F0231C56BFBE0050D285 /* AppDelegate.swift */,
 				F100F0251C56BFBE0050D285 /* ViewController.swift */,
 				F100F0271C56BFBE0050D285 /* Main.storyboard */,
+				F12F0B281CA319B2009AF2C3 /* PlotView.swift */,
 				F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */,
 				F100F02A1C56BFBE0050D285 /* Assets.xcassets */,
 				F100F02C1C56BFBE0050D285 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F100F0261C56BFBE0050D285 /* ViewController.swift in Sources */,
+				F12F0B291CA319B2009AF2C3 /* PlotView.swift in Sources */,
 				F1ADBC431C7D17F000F91E52 /* ECGViewController.swift in Sources */,
 				F100F0241C56BFBE0050D285 /* AppDelegate.swift in Sources */,
 				F10F3B7C1C91F80300443A7E /* NSData_hexadecimalString.swift in Sources */,
