@@ -11,9 +11,6 @@ import CoreBluetooth
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, UITableViewDataSource, UITableViewDelegate {
     
-    let kBLESensorServiceUUIDString = "92F4B880-31B5-11E3-9C7D-0002A5D5C51B"
-    let kBLESensorCharacteristicDataString = "C7BC60E0-31B5-11E3-9389-0002A5D5C51B"
-
     @IBOutlet weak var tableView:UITableView!
     
     //BLE
@@ -33,7 +30,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // pull to refresh controller
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(ViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         return refreshControl
     }()
@@ -81,7 +78,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         print("Scanning...")
         BLEdevices.removeAll()
         centralManager.scanForPeripheralsWithServices(nil, options: nil)
-        refreshTimer=NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "afterScanning",userInfo: nil, repeats: false)
+        refreshTimer=NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(ViewController.afterScanning),userInfo: nil, repeats: false)
     }
     
     func afterScanning() {

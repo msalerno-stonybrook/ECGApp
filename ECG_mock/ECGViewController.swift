@@ -15,10 +15,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
-//    let kBLESensorServiceUUID = CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B")
-//    let kBLESensorCharacteristicDataUUID = CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B")
-    let kBLESensorServiceUUID = CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9")
-    let kBLESensorCharacteristicDataUUID = CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3")
+    let ServicesList = [CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B"),CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9")]
+    let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +79,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         for service in peripheral.services! {
             let thisService = service as CBService
             print("found service \(thisService.UUID)")
-            if thisService.UUID == kBLESensorServiceUUID {
+            if ServicesList.contains(thisService.UUID) {
                 // is any of the services the BLESensor service?
                 print("found ECGSensor service!")
                 peripheral.discoverCharacteristics(nil, forService: thisService)
@@ -96,7 +94,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         for charateristic in service.characteristics! {
             let thisCharacteristic = charateristic as CBCharacteristic
             print("found characteristic \(thisCharacteristic.UUID)")
-            if thisCharacteristic.UUID == kBLESensorCharacteristicDataUUID {
+            if CharacteristicsList.contains(thisCharacteristic.UUID) {
                 // Enable Sensor Notification
                 peripheral.setNotifyValue(true, forCharacteristic: thisCharacteristic)
             }
@@ -109,7 +107,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         
         print("got some data...")
         
-        if characteristic.UUID == kBLESensorCharacteristicDataUUID {
+        if CharacteristicsList.contains(characteristic.UUID) {
             print("got BLE sensor data")
             dataLabel.text = characteristic.value!.hexadecimalString as String
             
