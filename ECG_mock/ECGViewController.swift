@@ -118,7 +118,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             dataReceived.getBytes(&bytes, length: dataReceived.length)
 
             for index in 0...dataReceived.length/2-1 {
-                let dataPoint = Int(bytes[index*2])+Int(bytes[index*2+1])*256
+                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
                 data.append(dataPoint)
                 print("appended \(dataPoint)")
             }
@@ -128,7 +128,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     }
 
     func dataYforWidth(width: Int) -> [Int] {
-        return [1,2,3]
+        return data
     }
 
 }
