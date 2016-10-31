@@ -26,7 +26,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         // when view loads connect to peripheral that was selected
         print("ECG View loads")
         CBManager.delegate = self
-        CBManager.connectPeripheral(ECGsensor, options: nil)
+        CBManager.connect(ECGsensor, options: nil)
         plotView.delegate = self
         // Do any additional setup after loading the view.
     }
@@ -49,18 +49,23 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     /******* CBCentralManagerDelegate *******/
     
     // Check status of BLE hardware
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        if central.state == CBCentralManagerState.PoweredOn {
-            print("Central Manager is Powered on...")
-        }
-        else {
-            // Can have different conditions for all states if needed - show generic alert for now
-            print("Error: Bluetooth switched off or not initialized")
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        let state = central.state
+        if #available(iOS 10.0, *) {
+            if state == CBManagerState.poweredOn {
+                print("Central Manager is Powered on...")
+            }
+            else {
+                // Can have different conditions for all states if needed - show generic alert for now
+                print("Error: Bluetooth switched off or not initialized")
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
     
     // Discover services of the peripheral
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Discovering peripheral services")
         ECGsensor = peripheral
         ECGsensor.delegate = self
@@ -68,25 +73,25 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     }
     
     // If disconnected, start searching again
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("Disconnected")
         // go back to table view controller when disconnected
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     /******* CBCentralPeripheralDelegate *******/
     
     // once connected the peripheral is reporting back with services
     // check whether BLESensorService exists and if yes then discover its characteristics
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         print("connected...")
         print("found services")
         for service in peripheral.services! {
             let thisService = service as CBService
-            print("found service \(thisService.UUID)")
-            if ServicesList.contains(thisService.UUID) {
+            print("found service \(thisService.uuid)")
+            if ServicesList.contains(thisService.uuid) {
                 // is any of the services the BLESensor service?
                 print("found ECGSensor service!")
-                peripheral.discoverCharacteristics(nil, forService: thisService)
+                peripheral.discoverCharacteristics(nil, for: thisService)
             }
         }
 
@@ -94,30 +99,30 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     // this function is called when the device returns discovered characteristics
     // set to notify if the proper characteristic is found
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for charateristic in service.characteristics! {
             let thisCharacteristic = charateristic as CBCharacteristic
-            print("found characteristic \(thisCharacteristic.UUID)")
-            if CharacteristicsList.contains(thisCharacteristic.UUID) {
+            print("found characteristic \(thisCharacteristic.uuid)")
+            if CharacteristicsList.contains(thisCharacteristic.uuid) {
                 // Enable Sensor Notification
-                peripheral.setNotifyValue(true, forCharacteristic: thisCharacteristic)
+                peripheral.setNotifyValue(true, for: thisCharacteristic)
             }
         }
         
     }
     
     // this function is called then a characteristic was updated
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
-        if CharacteristicsList.contains(characteristic.UUID) {
+        if CharacteristicsList.contains(characteristic.uuid) {
             print("got BLE sensor data")
             let dataReceived = characteristic.value!
             dataLabel.text = dataReceived.hexadecimalString as String
             
-            var bytes = [UInt8](count: dataReceived.length, repeatedValue: 0)
-            dataReceived.getBytes(&bytes, length: dataReceived.length)
+            var bytes = [UInt8](repeating: 0, count: dataReceived.count)
+            (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
 
-            for index in 0...dataReceived.length/2-1 {
+            for index in 0...dataReceived.count/2-1 {
                 let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
                 data.append(dataPoint)
                 print("appended \(dataPoint)")
@@ -127,7 +132,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
         }
     }
 
-    func dataYforWidth(width: Int) -> [Int] {
+    func dataYforWidth(_ width: Int) -> [Int] {
         return data
     }
 

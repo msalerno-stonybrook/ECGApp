@@ -18,7 +18,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var ECGsensorPeripheral : CBPeripheral!
 
     var BLEdevices = [CBPeripheral]()
-    var refreshTimer: NSTimer?
+    var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,22 +30,22 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // pull to refresh controller
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(ViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(ViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         
         return refreshControl
     }()
     
     // Table Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return BLEdevices.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         
         if let BLEname = BLEdevices[indexPath.row].name {
             cell.textLabel?.text = BLEname
@@ -57,10 +57,10 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         return cell
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        let ECGViewer=segue.destinationViewController as! ECGViewController
+        let ECGViewer=segue.destination as! ECGViewController
         
         if let indexPath = self.tableView.indexPathForSelectedRow {
             // pass the peripheral that was selected to new view controller
@@ -72,13 +72,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     // pull to refresh
-    func handleRefresh(refreshControl: UIRefreshControl) {
+    func handleRefresh(_ refreshControl: UIRefreshControl) {
         // Do some reloading of data and update the table view's data source
         // Fetch more objects from a web service, for example...
         print("Scanning...")
         BLEdevices.removeAll()
-        centralManager.scanForPeripheralsWithServices(nil, options: nil)
-        refreshTimer=NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(ViewController.afterScanning),userInfo: nil, repeats: false)
+        centralManager.scanForPeripherals(withServices: nil, options: nil)
+        refreshTimer=Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(ViewController.afterScanning),userInfo: nil, repeats: false)
     }
     
     func afterScanning() {
@@ -91,20 +91,25 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     /******* CBCentralManagerDelegate *******/
      
      // Check status of BLE hardware
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        if central.state == CBCentralManagerState.PoweredOn {
-            print("Central Manager is Powered on...")
-        }
-        else {
-            // Can have different conditions for all states if needed - show generic alert for now
-            print("Error: Bluetooth switched off or not initialized")
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        let state = central.state
+        if #available(iOS 10.0, *) {
+            if state == CBManagerState.poweredOn {
+                print("Central Manager is Powered on...")
+            }
+            else {
+                // Can have different conditions for all states if needed - show generic alert for now
+                print("Error: Bluetooth switched off or not initialized")
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
     
     // Check out the discovered peripherals to find Sensor Tag
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("Found device: ",advertisementData)
-        if let nameOfDeviceFound = (advertisementData as NSDictionary).objectForKey(CBAdvertisementDataLocalNameKey) as? NSString {
+        if let nameOfDeviceFound = (advertisementData as NSDictionary).object(forKey: CBAdvertisementDataLocalNameKey) as? NSString {
             if (nameOfDeviceFound.hasPrefix("ECG-Sensor")) {
                 // add peripheral to BLE devices array if not already in there
                 if !BLEdevices.contains(peripheral) {
@@ -124,9 +129,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 //
     
     // If disconnected, start searching again
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("Disconnected")
-        central.scanForPeripheralsWithServices(nil, options: nil)
+        central.scanForPeripherals(withServices: nil, options: nil)
     }
     
     /******* CBCentralPeripheralDelegate *******/
@@ -139,20 +144,20 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
      // Barometer Service
      // Gyroscope Service
      // (Others are not implemented)
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         print("Looking at peripheral services")
     }
     
     
     // Enable notification and sensor for each characteristic of valid service
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
         print("Enabling sensors")
         
     }
     
     // Get data values when they are updated
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         print("Connected")
         
@@ -163,11 +168,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func unwindToBLEtable(unwindSegue: UIStoryboardSegue) {
+    @IBAction func unwindToBLEtable(_ unwindSegue: UIStoryboardSegue) {
         print("pressed Disconnect")
         centralManager.delegate = self
         // need to set the delegate back to previous view controller
-        if let SourceController = unwindSegue.sourceViewController as? ECGViewController {
+        if let SourceController = unwindSegue.source as? ECGViewController {
             print("cancel connection to BLEsensor")
             centralManager.cancelPeripheralConnection(SourceController.ECGsensor)
         }
