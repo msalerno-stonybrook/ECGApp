@@ -16,8 +16,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     var ECGsensor : CBPeripheral!
     var CBManager : CBCentralManager!
-    let ServicesList = [CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B"),CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9")]
-    let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3")]
+    let ServicesList = [CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B"),CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9"),CBUUID(string:"FE84")]
+    let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3"), CBUUID(string:"2D30C082-F39F-4CE6-923F-3484EA480596")]
     
     var data = [Int]()
 
@@ -123,9 +123,9 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
 
             for index in 0...dataReceived.count/2-1 {
-                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
+//                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
+                let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
                 data.append(dataPoint)
-                print("appended \(dataPoint)")
             }
             
             plotView.setNeedsDisplay()            
