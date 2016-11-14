@@ -41,13 +41,17 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return BLEdevices.count
+        return BLEdevices.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         
-        if let BLEname = BLEdevices[indexPath.row].name {
+        
+        if indexPath.row >= BLEdevices.count {
+            cell.textLabel?.text = "FAKE"
+        }
+        else if let BLEname = BLEdevices[indexPath.row].name {
             cell.textLabel?.text = BLEname
         }
         
@@ -56,6 +60,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         return cell
     }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
