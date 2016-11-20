@@ -19,7 +19,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 
     var BLEdevices = [CBPeripheral]()
     var refreshTimer: Timer?
-    var fakeData = true
+    var fakeSwitch = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,17 +64,10 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         return cell
     }
 
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if fakeData {
-            let FakeECGViewer=segue.destination as! FakeViewController
-        }
-        else {
-        
         let ECGViewer=segue.destination as! ECGViewController
-        
         if let indexPath = self.tableView.indexPathForSelectedRow {
             // pass the peripheral that was selected to new view controller
             ECGViewer.ECGsensor=BLEdevices[indexPath.row]
@@ -82,7 +75,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // also pass central manager in case it changes status
         ECGViewer.CBManager=centralManager
         ECGViewer.CBManager.delegate = ECGViewController.self as? CBCentralManagerDelegate
-    }
     }
     
     // pull to refresh
