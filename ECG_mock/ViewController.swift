@@ -19,7 +19,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 
     var BLEdevices = [CBPeripheral]()
     var refreshTimer: Timer?
-    var fakeSwitch = true
+    var fakeData = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,39 +42,59 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return BLEdevices.count + 1
+        if fakeData == true {
+            return BLEdevices.count + 1
+        }
+        else {
+            return BLEdevices.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         
-        
-        if indexPath.row >= BLEdevices.count {
+        if fakeData == false {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
+            
+            if let BLEname = BLEdevices[indexPath.row].name {
+                cell.textLabel?.text = BLEname
+            }
+            
+            let myImage = UIImage(named: "Cell_Icons")
+            cell.imageView?.image = myImage
+            
+            return cell
+        }
+            
+            
+        else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellfake", for: indexPath) as UITableViewCell
             cell.textLabel?.text = "FAKE"
+            let myImage = UIImage(named: "Cell_Icons")
+            cell.imageView?.image = myImage
+            
+            return cell
         }
-        else if let BLEname = BLEdevices[indexPath.row].name {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-            cell.textLabel?.text = BLEname
-        }
-        
-        let myImage = UIImage(named: "Cell_Icons")
-        cell.imageView?.image = myImage
-        
-        return cell
     }
-
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        let ECGViewer=segue.destination as! ECGViewController
-        if let indexPath = self.tableView.indexPathForSelectedRow {
-            // pass the peripheral that was selected to new view controller
-            ECGViewer.ECGsensor=BLEdevices[indexPath.row]
+        if fakeData == true {
+            let FakeECGViewer=segue.destination as! FakeViewController
         }
-        // also pass central manager in case it changes status
-        ECGViewer.CBManager=centralManager
-        ECGViewer.CBManager.delegate = ECGViewController.self as? CBCentralManagerDelegate
+        else {
+            
+            let ECGViewer=segue.destination as! ECGViewController
+            
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                // pass the peripheral that was selected to new view controller
+                ECGViewer.ECGsensor=BLEdevices[indexPath.row]
+            }
+            // also pass central manager in case it changes status
+            ECGViewer.CBManager=centralManager
+            ECGViewer.CBManager.delegate = ECGViewController.self as? CBCentralManagerDelegate
+        }
     }
     
     // pull to refresh
