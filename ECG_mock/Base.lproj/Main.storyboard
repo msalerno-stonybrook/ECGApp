@@ -110,19 +110,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test Page" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTU-gH-rq7">
-                                <rect key="frame" x="122" y="165" width="76" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTU-gH-rq7">
+                                <rect key="frame" x="116" y="165" width="89" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GAm-03-6k4">
+                                <rect key="frame" x="37" y="507" width="34" height="30"/>
+                                <state key="normal" title="Start"/>
+                                <connections>
+                                    <action selector="start:" destination="zBn-pf-kJN" eventType="touchUpInside" id="eF8-BZ-haa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Wg-Er-e4t">
+                                <rect key="frame" x="244" y="507" width="32" height="30"/>
+                                <state key="normal" title="Stop"/>
+                                <connections>
+                                    <action selector="stop:" destination="zBn-pf-kJN" eventType="touchUpInside" id="FKy-Vx-Ihq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="VTU-gH-rq7" firstAttribute="centerX" secondItem="aCp-Mm-obF" secondAttribute="centerX" id="14P-qq-UGr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3Wg-Er-e4t" secondAttribute="trailing" constant="28" id="2mM-d8-7aX"/>
+                            <constraint firstItem="3Wg-Er-e4t" firstAttribute="baseline" secondItem="GAm-03-6k4" secondAttribute="baseline" id="Kbu-5N-qyX"/>
+                            <constraint firstItem="aCz-Zo-CJP" firstAttribute="top" secondItem="GAm-03-6k4" secondAttribute="bottom" constant="31" id="T3k-xX-wNd"/>
+                            <constraint firstItem="GAm-03-6k4" firstAttribute="leading" secondItem="aCp-Mm-obF" secondAttribute="leadingMargin" constant="21" id="oKk-9n-uxO"/>
                             <constraint firstItem="VTU-gH-rq7" firstAttribute="top" secondItem="v9p-HP-1Kl" secondAttribute="bottom" constant="145" id="pIQ-I1-dgf"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="displayTimeLabel" destination="VTU-gH-rq7" id="2Gf-bA-Y1a"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XnH-Kx-XNf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
