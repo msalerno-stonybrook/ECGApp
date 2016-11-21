@@ -28,7 +28,7 @@ func IterativeSD (M: Double, S: Double, new: Double, number: Int) -> (M2:Double,
     return (newM, newS, deviation)
 }
 
-func IterativePeakFind (M: Double, S: Double, new: Double, avg: Double, dataSet: [Double], peaks: [Int]) -> (M2:Double, S2: Double, SD: Double, dataSet2: [Double], newPeaks: [Int], movingAverage: Double){
+func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [Int], peaks: [Int]) -> (M2:Double, S2: Double, SD: Double, dataSet2: [Int], newPeaks: [Int], movingAverage: Double){
     
     // Variable initialization
     let initialPoints = dataSet.count
@@ -39,15 +39,15 @@ func IterativePeakFind (M: Double, S: Double, new: Double, avg: Double, dataSet:
     let threshold: Double = 5
     
     if initialPoints < 3000 { // Essentially ignores data for ~15 seconds
-        (newM, newS, newSD) = IterativeSD(M: M, S: S, new: new, number: initialPoints)
+        (newM, newS, newSD) = IterativeSD(M: M, S: S, new: Double(new), number: initialPoints)
         newDataSet.append(new)
         newPeaks.append(0)
-        newAvg = (newAvg * Double(initialPoints) + new) / Double(initialPoints + 1)
+        newAvg = (newAvg * Double(initialPoints) + Double(new)) / Double(initialPoints + 1)
     } else { // Starts checking peaks within threshold limit
-        (newM, newS, newSD) = IterativeSD(M: M, S: S, new: new, number: initialPoints)
+        (newM, newS, newSD) = IterativeSD(M: M, S: S, new: Double(new), number: initialPoints)
         newDataSet.append(new)
-        newAvg = (newAvg * Double(initialPoints) + new) / Double(initialPoints + 1)
-        if new > (newAvg + (newSD * threshold)) {
+        newAvg = (newAvg * Double(initialPoints) + Double(new)) / Double(initialPoints + 1)
+        if Double(new) > (newAvg + (newSD * threshold)) {
             newPeaks.append(1)
         } else {
             newPeaks.append(0)
@@ -79,7 +79,7 @@ func PeakVerify (peaks: [Int]) -> [Int] {
 
 func HeartRate(peaks: [Int]) -> Int {
     let length = peaks.count
-    var rate = Int ()
+    var rate = Double ()
     // WAIT
     if length < 5000 {
         rate = 0;
@@ -87,15 +87,16 @@ func HeartRate(peaks: [Int]) -> Int {
         // Calculates heart rate
     else {
         var testdata = [Int]()
+        var index = length - 2000
         for _ in 1...2000 {
-            var index = length - 2000
             testdata.append(peaks[index])
             index += 1
         }
         let sum = testdata.reduce(0,+)
-        rate = sum / (10/60)
+        rate = Double(sum) / (10/60)
     }
-    return rate
+    let variable = Int(rate)
+    return variable
 }
 
 

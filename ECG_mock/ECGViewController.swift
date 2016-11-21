@@ -22,7 +22,13 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     
     var data = [Int]()
     
+    // Begin heart rate analysis
     var rate = Int()
+    var m = Double()
+    var s = Double()
+    var avg = Double()
+    var peaks = [Int]()
+    var SD = Double()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,7 +127,6 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             print("got BLE sensor data")
             let dataReceived = characteristic.value!
             dataLabel.text = dataReceived.hexadecimalString as String
-            
             heartLabel.text = "\(rate)"
             
             var bytes = [UInt8](repeating: 0, count: dataReceived.count)
@@ -130,7 +135,9 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             for index in 0...dataReceived.count/2-1 {
 //                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
                 let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
-                data.append(dataPoint)
+                // data.append(dataPoint) << Removed by Louie >>
+                (m, s, SD, data, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
+                rate = HeartRate(peaks: peaks)
             }
             
             plotView.setNeedsDisplay()            
