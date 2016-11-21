@@ -9,6 +9,7 @@
 import UIKit
 protocol ECGDataSource {
     func dataYforWidth(_ width : Int) -> [Int]
+    func heartrate() -> Int
 }
 
 class PlotView: UIView {

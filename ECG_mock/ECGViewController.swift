@@ -12,6 +12,7 @@ import CoreBluetooth
 class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManagerDelegate, ECGDataSource {
     
     @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var heartLabel: UILabel!
     @IBOutlet weak var plotView: PlotView!
     
     var ECGsensor : CBPeripheral!
@@ -20,6 +21,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3"), CBUUID(string:"2D30C082-F39F-4CE6-923F-3484EA480596")]
     
     var data = [Int]()
+    
+    var rate = Int()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,6 +122,8 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             let dataReceived = characteristic.value!
             dataLabel.text = dataReceived.hexadecimalString as String
             
+            heartLabel.text = "\(rate)"
+            
             var bytes = [UInt8](repeating: 0, count: dataReceived.count)
             (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
 
@@ -134,6 +139,10 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
 
     func dataYforWidth(_ width: Int) -> [Int] {
         return data
+    }
+    
+    func heartrate() -> Int {
+        return 64
     }
 
 }

@@ -19,7 +19,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 
     var BLEdevices = [CBPeripheral]()
     var refreshTimer: Timer?
-    var fakeData = true
+    var fakeData = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +68,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellfake", for: indexPath) as UITableViewCell
-            cell.textLabel?.text = "FAKE"
+            cell.textLabel?.text = "Fake Data Generator"
             let myImage = UIImage(named: "Cell_Icons")
             cell.imageView?.image = myImage
             
