@@ -78,25 +78,30 @@ func PeakVerify (peaks: [Int]) -> [Int] {
  4) Repeat */
 
 func HeartRate(peaks: [Int]) -> Int {
-    let length = peaks.count
-    var rate = Double ()
-    // WAIT
-    if length < 5000 {
+    let length = peaks.count // Number of points provided
+    var rate = Int () // Initialize
+    var testData = peaks // To prevent modification of data
+    var gaps = [Int]() // Initialize
+    let points = testData.reduce(0,+)-1 // We throw out 1st value
+    let interval = 5 // in miliseconds
+    
+    if length < 5000 { // WAIT
         rate = 0;
     }
-        // Calculates heart rate
-    else {
-        var testdata = [Int]()
-        var index = length - 2000
-        for _ in 1...2000 {
-            testdata.append(peaks[index])
-            index += 1
+    else { // Calculates heart rate
+        
+        // Removes first "peak" marker, to give a clean window)
+        testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+        
+        // Start search
+        for i in 0 ... points {
+            let index: Int = testData.index(of: 1)!
+            gaps[i] = index
+            testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+            
         }
-        let sum = testdata.reduce(0,+)
-        rate = Double(sum) / (10/60)
+        let averageGap = gaps.reduce(0,+)/points // Average time elapsed per gap
+        rate = 60000/(averageGap * interval) // Value in "Peaks"/minute
     }
-    let variable = Int(rate)
-    return variable
+    return rate
 }
-
-
