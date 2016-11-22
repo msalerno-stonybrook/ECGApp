@@ -325,3 +325,74 @@ func PeakVerify (peaks: [Int]) -> [Int] {
  3) Request new packet
  4) Repeat */
 
+
+var A = [1,2,3,4,5,5,7]
+var test = A.index(of: 5)
+
+var C = A[(A.index(of: 5)!+1)...(A.count-1)]
+
+
+
+
+
+
+
+
+
+
+A.index(of: 5)
+
+
+A.remove(at: 0)
+
+A
+
+var B = A[1...(A.count-1)]
+
+var x: Int = 2
+var y: Int = 3
+x/y
+
+
+
+
+func HeartRate(peaks: [Int]) -> Int {
+    let length = peaks.count // Number of points provided
+    var rate = Int () // Initialize
+    var testData = peaks // To prevent modification of data
+    var gaps = [Int]() // Initialize
+    let points = testData.reduce(0,+)-1 // We throw out 1st value
+    let interval = 5 // in miliseconds
+    
+    if length < 5000 { // WAIT
+        rate = 0;
+    }
+    else { // Calculates heart rate
+        
+        // Removes first "peak" marker, to give a clean window)
+        testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+        
+        // Start search
+        for i in 0 ... points {
+        gaps[i] = testData.index(of: 1)!
+        testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+        }
+    }
+    
+    let averageGap = gaps.reduce(0,+)/points // Average time elapsed per gap
+    rate = 60000/(averageGap * interval) // Value in "Peaks"/minute
+    
+    return rate
+}
+
+
+/*
+ var testdata = [Int]()
+ var index = length - 2000
+ for _ in 1...2000 {
+ testdata.append(peaks[index])
+ index += 1
+ }
+ let sum = testdata.reduce(0,+)
+ rate = Double(sum) / (10/60)
+ */
