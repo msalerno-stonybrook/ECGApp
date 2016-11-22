@@ -32,6 +32,7 @@ func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [I
     
     // Variable initialization
     let initialPoints = dataSet.count
+    print(initialPoints)
     var (newM, newS, newSD) = (0.0,0.0,0.0)
     var newDataSet = dataSet
     var newPeaks = peaks
@@ -78,7 +79,7 @@ func PeakVerify (peaks: [Int]) -> [Int] {
  4) Repeat */
 
 func HeartRate(peaks: [Int]) -> Int {
-    let length = peaks.count // Number of points provided
+    var length = peaks.count // Number of points provided
     var rate = Int () // Initialize
     var testData = peaks // To prevent modification of data
     var gaps = [Int]() // Initialize
@@ -92,13 +93,16 @@ func HeartRate(peaks: [Int]) -> Int {
         
         // Removes first "peak" marker, to give a clean window)
         testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
-        
+        length = testData.count
         // Start search
         for i in 0 ... points {
             let index: Int = testData.index(of: 1)!
-            gaps[i] = index
-            testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+            let value = [index]
+            gaps += value
             
+
+            testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
+            length = testData.count
         }
         let averageGap = gaps.reduce(0,+)/points // Average time elapsed per gap
         rate = 60000/(averageGap * interval) // Value in "Peaks"/minute

@@ -8,12 +8,13 @@
 
 import UIKit
 
-class FakeViewController: UIViewController {
+class FakeViewController: UIViewController, FakeDataSource {
 
 
+    @IBOutlet weak var heartRate: UILabel!
     @IBOutlet weak var displayTimeLabel: UILabel!
     @IBOutlet weak var displayDataLabel: UILabel!
-    @IBOutlet weak var plotView: PlotView!
+    @IBOutlet weak var plotView: FakePlotView!
     
     var startTime = TimeInterval()
     var timer:Timer = Timer()
@@ -21,6 +22,15 @@ class FakeViewController: UIViewController {
     var alarmTime: Date!
     
     var v: Int = 1
+    
+    // Begin heart rate analysis
+    var rate = Int()
+    var m = Double()
+    var s = Double()
+    var avg = Double()
+    var peaks = [Int]()
+    var SD = Double()
+    var verified = [Int]()
     
     var dataStream = [Int]()
     
@@ -75,14 +85,25 @@ class FakeViewController: UIViewController {
         (packet, v) = PacketGeneration(v: v)
         //displayDataLabel.txt = "\(packet)"
         
-        
+        //print(packet)
         /*func PacketGeneration(v:Int = v) -> [Int] {
             return packet
         }
         
         v += 1 */
         
-        dataStream = dataStream + packet
+        //dataStream = dataStream + packet
+        for i in 0...9 {
+        let dataPoint = packet[i]
+        (m, s, SD, dataStream, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: dataStream, peaks: peaks)
+
+        verified = PeakVerify(peaks: peaks)
+
+        rate = HeartRate(peaks: verified)
+        }
+        heartRate.text = "\(rate)"
+
+
 }
 
     override func didReceiveMemoryWarning() {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		012B4C561DE3F18C003FD752 /* FakePlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012B4C551DE3F18C003FD752 /* FakePlotView.swift */; };
 		016B53381DE3BE0F0035CD8A /* FakeDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016B53371DE3BE0F0035CD8A /* FakeDataGenerator.swift */; };
 		01F9392C1DDA33D800EE11AB /* FakeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F9392B1DDA33D800EE11AB /* FakeViewController.swift */; };
 		01FBFC401DE375040033E98F /* DataAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FBFC3F1DE375040033E98F /* DataAnalysis.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		012B4C551DE3F18C003FD752 /* FakePlotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakePlotView.swift; sourceTree = "<group>"; };
 		016B53371DE3BE0F0035CD8A /* FakeDataGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeDataGenerator.swift; sourceTree = "<group>"; };
 		01F9392B1DDA33D800EE11AB /* FakeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeViewController.swift; sourceTree = "<group>"; };
 		01FBFC3F1DE375040033E98F /* DataAnalysis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataAnalysis.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				016B53371DE3BE0F0035CD8A /* FakeDataGenerator.swift */,
 				F100F0271C56BFBE0050D285 /* Main.storyboard */,
 				F12F0B281CA319B2009AF2C3 /* PlotView.swift */,
+				012B4C551DE3F18C003FD752 /* FakePlotView.swift */,
 				F1ADBC421C7D17F000F91E52 /* ECGViewController.swift */,
 				F100F02A1C56BFBE0050D285 /* Assets.xcassets */,
 				F100F02C1C56BFBE0050D285 /* LaunchScreen.storyboard */,
@@ -157,6 +160,7 @@
 			files = (
 				F100F0261C56BFBE0050D285 /* ViewController.swift in Sources */,
 				F12F0B291CA319B2009AF2C3 /* PlotView.swift in Sources */,
+				012B4C561DE3F18C003FD752 /* FakePlotView.swift in Sources */,
 				016B53381DE3BE0F0035CD8A /* FakeDataGenerator.swift in Sources */,
 				F1ADBC431C7D17F000F91E52 /* ECGViewController.swift in Sources */,
 				01F9392C1DDA33D800EE11AB /* FakeViewController.swift in Sources */,
