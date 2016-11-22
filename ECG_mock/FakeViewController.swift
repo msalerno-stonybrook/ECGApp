@@ -13,13 +13,16 @@ class FakeViewController: UIViewController {
 
     @IBOutlet weak var displayTimeLabel: UILabel!
     @IBOutlet weak var displayDataLabel: UILabel!
+    @IBOutlet weak var plotView: PlotView!
     
     var startTime = TimeInterval()
     var timer:Timer = Timer()
     var endTime: Date!
     var alarmTime: Date!
     
+    var v: Int = 1
     
+    var dataStream = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +71,18 @@ class FakeViewController: UIViewController {
         
         //concatenate minuets, seconds and milliseconds as assign it to the UILabel
         displayTimeLabel.text = "\(strMinutes):\(strSeconds):\(strFraction)"
+        var packet = [Int]()
+        (packet, v) = PacketGeneration(v: v)
+        //displayDataLabel.txt = "\(packet)"
         
+        
+        /*func PacketGeneration(v:Int = v) -> [Int] {
+            return packet
+        }
+        
+        v += 1 */
+        
+        dataStream = dataStream + packet
 }
 
     override func didReceiveMemoryWarning() {
@@ -86,5 +100,30 @@ class FakeViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+/*
+    func plotfakeData(){
+    
+    var bytes = [UInt8](repeating: 0, count: dataReceived.count)
+    (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
+    
+    for index in 0...dataReceived.count/2-1 {
+    //                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
+    let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
+    // data.append(dataPoint) << Removed by Louie >>
+    (m, s, SD, data, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
+    rate = HeartRate(peaks: peaks)
+    }
+    
+    plotView.setNeedsDisplay()
+}
+ */
 
+func dataYforWidth(_ width: Int) -> [Int] {
+    return [Int](dataStream)
+}
+
+func heartrate() -> Int {
+    return 64
+}
 }

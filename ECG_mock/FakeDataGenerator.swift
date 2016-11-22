@@ -8,8 +8,8 @@
 
 import Foundation
 
-func PacketGeneration(v: Int) -> [UInt] {
-    var fake_ecg: [UInt] = [1035,
+func PacketGeneration(v: Int) -> (packet:[Int], index: Int) {
+    var fake_ecg: [Int] = [1035,
                             1035,
                             1041,
                             1041,
@@ -251,7 +251,7 @@ func PacketGeneration(v: Int) -> [UInt] {
                             1030,
                             1035]
     var start: Int = v
-    var packet = [UInt]()
+    var packet = [Int]()
     for _ in 1...10 {
         packet.append(fake_ecg[start])
         start += 1
@@ -262,7 +262,7 @@ func PacketGeneration(v: Int) -> [UInt] {
     
   //  displayDataLabel.text = "\(packet)"
     
-    return packet
+    return (packet, start)
     
 }
 
