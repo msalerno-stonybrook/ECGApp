@@ -174,6 +174,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     }
 
     func dataYforWidth(_ width: Int) -> [Int] {
+        //print(data)
         return data
     }
     

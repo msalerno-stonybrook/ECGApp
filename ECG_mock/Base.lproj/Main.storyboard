@@ -179,8 +179,8 @@
                     <connections>
                         <outlet property="displayDataLabel" destination="SbV-Gi-kiB" id="5Wy-3v-LtN"/>
                         <outlet property="displayTimeLabel" destination="VTU-gH-rq7" id="2Gf-bA-Y1a"/>
+                        <outlet property="fplotView" destination="Lb0-Nu-uar" id="Tb4-Wn-h2m"/>
                         <outlet property="heartRate" destination="YCh-4B-uUj" id="p3u-RB-LLE"/>
-                        <outlet property="plotView" destination="Lb0-Nu-uar" id="49P-eT-BUZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XnH-Kx-XNf" userLabel="First Responder" sceneMemberID="firstResponder"/>

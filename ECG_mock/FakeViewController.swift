@@ -14,7 +14,8 @@ class FakeViewController: UIViewController, FakeDataSource {
     @IBOutlet weak var heartRate: UILabel!
     @IBOutlet weak var displayTimeLabel: UILabel!
     @IBOutlet weak var displayDataLabel: UILabel!
-    @IBOutlet weak var plotView: FakePlotView!
+    @IBOutlet weak var fplotView: FakePlotView!
+    
     
     var startTime = TimeInterval()
     var timer:Timer = Timer()
@@ -43,7 +44,7 @@ class FakeViewController: UIViewController, FakeDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        fplotView.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -118,9 +119,10 @@ class FakeViewController: UIViewController, FakeDataSource {
                  verified.removeAll(keepingCapacity: true)
                  */
             }
+            
+            fplotView.setNeedsDisplay()
         }
         heartRate.text = "\(rate)"
-
 
 }
 
@@ -159,7 +161,9 @@ class FakeViewController: UIViewController, FakeDataSource {
  */
 
 func dataYforWidth(_ width: Int) -> [Int] {
-    return [Int](dataStream)
+    print(data)
+    return data
+    //return dataStream
 }
 
 func heartrate() -> Int {
