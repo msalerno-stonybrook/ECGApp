@@ -1,3 +1,7 @@
+//: Playground - noun: a place where people can play
+
+import UIKit
+
 //
 //  DataAnalysis.swift
 //  ECG_mock
@@ -28,18 +32,17 @@ func IterativeSD (M: Double, S: Double, new: Double, number: Int) -> (M2:Double,
     return (newM, newS, deviation)
 }
 
-func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [Int], peaks: [Int]) -> (M2:Double, S2: Double, SD: Double, dataSet2: [Int], newPeaks: [Int], movingAverage: Double){
+func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [Int], peaks: [Int]) -> (M2:Double, S2: Double, dataSet2: [Int], newPeaks: [Int], movingAverage: Double){
     
     // Variable initialization
     let initialPoints = dataSet.count
-    print(initialPoints)
     var (newM, newS, newSD) = (0.0,0.0,0.0)
     var newDataSet = dataSet
     var newPeaks = peaks
     var newAvg = avg
     let threshold: Double = 5
     
-    if initialPoints < 3000 { // Essentially ignores data for ~15 seconds
+    if initialPoints < 300 { // Essentially ignores data for ~15 seconds
         (newM, newS, newSD) = IterativeSD(M: M, S: S, new: Double(new), number: initialPoints)
         newDataSet.append(new)
         newPeaks.append(0)
@@ -54,20 +57,24 @@ func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [I
             newPeaks.append(0)
         }
     }
-    return (newM, newS, newSD, newDataSet, newPeaks, newAvg)
+    return (newM, newS, newDataSet, newPeaks, newAvg)
 }
 
-func PeakVerify (peaks: [Int]) -> [Int] {
+func PeakVerify (peaks: [Int], verifiedPeaks: [Int]) -> [Int] {
     let points = peaks.count
-    var verifiedPeaks = [Int]()
+    points
+    var verified = verifiedPeaks
     if points < 2 { // Ignores first point
-        verifiedPeaks = [0]
+        verified.append(0)
     } else { // Finds peaks
         if peaks[points-2] < peaks[points-1] {
-            verifiedPeaks.append(1)
+            verified.append(1)
+        }
+        else{
+            verified.append(0)
         }
     }
-    return verifiedPeaks
+    return verified
 }
 
 
@@ -79,33 +86,34 @@ func PeakVerify (peaks: [Int]) -> [Int] {
  4) Repeat */
 
 func HeartRate(peaks: [Int]) -> Int {
-    var length = peaks.count // Number of points provided
-    var rate = Int () // Initialize
+    var length = peaks.count-1 // Number of points provided
     var testData = peaks // To prevent modification of data
+    var rate: Int = 3
     var gaps = [Int]() // Initialize
-    let points = testData.reduce(0,+)-1 // We throw out 1st value
+    let points = testData.reduce(0,+)-3 // We throw out 1st value
     let interval = 5 // in miliseconds
     
-    if length < 5000 { // WAIT
+    if length < 999 { // WAIT
         rate = 0;
     }
     else { // Calculates heart rate
         
         // Removes first "peak" marker, to give a clean window)
-        testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
-        length = testData.count
-        // Start search
-        for i in 0 ... points {
-            let index: Int = testData.index(of: 1)!
-            let value = [index]
-            gaps += value
-            
-
-            testData = [Int](testData[(testData.index(of: 1)!+1)...(length-1)])
-            length = testData.count
+        var indx = (testData.index(of: 1)!) + 1
+        rate = indx
+        testData = [Int](testData[indx...length])
+        length = testData.count-1
+        
+        for _ in 0...points {
+            indx = (testData.index(of:1)!)+1
+            rate = indx
+            testData = [Int](testData[indx...length])
+            length = testData.count-1
+            gaps.append(indx)
         }
-        let averageGap = gaps.reduce(0,+)/points // Average time elapsed per gap
-        rate = 60000/(averageGap * interval) // Value in "Peaks"/minute
+        let averageGap = gaps.reduce(0,+) / gaps.count
+        rate = 60000 / (averageGap * interval)
     }
+    print(rate)
     return rate
 }

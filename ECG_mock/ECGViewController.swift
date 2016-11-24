@@ -20,15 +20,23 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     let ServicesList = [CBUUID(string:"92F4B880-31B5-11E3-9C7D-0002A5D5C51B"),CBUUID(string:"F9266FD7-EF07-45D6-8EB6-BD74F13620F9"),CBUUID(string:"FE84")]
     let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3"), CBUUID(string:"2D30C082-F39F-4CE6-923F-3484EA480596")]
     
-    var data = [Int]()
-    
     // Begin heart rate analysis
+    // Begin heart rate analysis
+    var data = [Int]()
+
+    //data.reserveCapacity(1000)
+    
     var rate = Int()
     var m = Double()
     var s = Double()
     var avg = Double()
     var peaks = [Int]()
     var SD = Double()
+    var verified = [Int]()
+    var position: Int = 1
+    var counter: Int = 1
+    
+    var dataStream = [Int]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,8 +144,29 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
 //                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
                 let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
                 // data.append(dataPoint) << Removed by Louie >>
-                (m, s, SD, data, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
-                rate = HeartRate(peaks: peaks)
+                (M2: m, S2: s, dataSet2: data, newPeaks: peaks, movingAverage: avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
+                
+                    verified = PeakVerify(peaks: peaks, verifiedPeaks: verified)
+                    var testWindow = verified
+                    var testCase = peaks.count % 1000
+                    if testCase == 0 {
+                        var length = peaks.count-1
+                        var indx = length - 999
+                        testWindow = [Int](verified[indx...length])
+                        rate = HeartRate(peaks: testWindow)
+                        counter = 0
+                    }
+                    
+                    /*/ RESET
+                     data.removeAll(keepingCapacity: true)
+                     rate = Int()
+                     m = Double()
+                     s = Double()
+                     avg = Double()
+                     peaks.removeAll(keepingCapacity: true)
+                     SD = Double()
+                     verified.removeAll(keepingCapacity: true)
+                     */
             }
             
             plotView.setNeedsDisplay()            

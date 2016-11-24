@@ -24,6 +24,9 @@ class FakeViewController: UIViewController, FakeDataSource {
     var v: Int = 1
     
     // Begin heart rate analysis
+    var data = [Int]()
+    //data.reserveCapacity(1000)
+
     var rate = Int()
     var m = Double()
     var s = Double()
@@ -31,6 +34,10 @@ class FakeViewController: UIViewController, FakeDataSource {
     var peaks = [Int]()
     var SD = Double()
     var verified = [Int]()
+    var position: Int = 1
+    var counter: Int = 1
+    
+    
     
     var dataStream = [Int]()
     
@@ -81,25 +88,36 @@ class FakeViewController: UIViewController, FakeDataSource {
         
         //concatenate minuets, seconds and milliseconds as assign it to the UILabel
         displayTimeLabel.text = "\(strMinutes):\(strSeconds):\(strFraction)"
+        
         var packet = [Int]()
-        (packet, v) = PacketGeneration(v: v)
-        //displayDataLabel.txt = "\(packet)"
+        (packet: packet, index: position) = PacketGeneration(v: position)
         
-        //print(packet)
-        /*func PacketGeneration(v:Int = v) -> [Int] {
-            return packet
-        }
-        
-        v += 1 */
-        
-        //dataStream = dataStream + packet
         for i in 0...9 {
-        let dataPoint = packet[i]
-        (m, s, SD, dataStream, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: dataStream, peaks: peaks)
-
-        verified = PeakVerify(peaks: peaks)
-
-        rate = HeartRate(peaks: verified)
+            var dataPoint = packet[i]
+            (m, s, data, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
+            
+            verified = PeakVerify(peaks: peaks, verifiedPeaks: verified)
+            
+            var testWindow = verified
+            var testCase = peaks.count % 1000
+            if testCase == 0 {
+                var length = peaks.count-1
+                var indx = length - 999
+                testWindow = [Int](verified[indx...length])
+                rate = HeartRate(peaks: testWindow)
+                counter = 0
+                
+                /*/ RESET
+                 data.removeAll(keepingCapacity: true)
+                 rate = Int()
+                 m = Double()
+                 s = Double()
+                 avg = Double()
+                 peaks.removeAll(keepingCapacity: true)
+                 SD = Double()
+                 verified.removeAll(keepingCapacity: true)
+                 */
+            }
         }
         heartRate.text = "\(rate)"
 
