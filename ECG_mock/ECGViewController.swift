@@ -148,25 +148,31 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
                 
                     verified = PeakVerify(peaks: peaks, verifiedPeaks: verified)
                     var testWindow = verified
-                    var testCase = peaks.count % 1000
+                    var testCase = peaks.count % 2000
                     if testCase == 0 {
                         var length = peaks.count-1
                         var indx = length - 999
                         testWindow = [Int](verified[indx...length])
                         rate = HeartRate(peaks: testWindow)
                         counter = 0
+                        
+                        /*/ RESET
+                        data.removeAll()
+                        m = Double()
+                        s = Double()
+                        avg = Double()
+                        peaks.removeAll()
+                        SD = Double()
+                        verified.removeAll() */
                     }
+                if data.count > 2000 {
+                    data.removeFirst()
+                    peaks.removeFirst()
+                    verified.removeFirst()
+                }
                     
-                    /*/ RESET
-                     data.removeAll(keepingCapacity: true)
-                     rate = Int()
-                     m = Double()
-                     s = Double()
-                     avg = Double()
-                     peaks.removeAll(keepingCapacity: true)
-                     SD = Double()
-                     verified.removeAll(keepingCapacity: true)
-                     */
+
+                
             }
             
             plotView.setNeedsDisplay()            

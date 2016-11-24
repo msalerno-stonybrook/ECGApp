@@ -52,7 +52,7 @@ class FakeViewController: UIViewController, FakeDataSource {
        alarmTime = Date()
         if (!timer.isValid) {
             let aSelector : Selector = #selector(FakeViewController.updateTime)
-            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: aSelector, userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: aSelector, userInfo: nil, repeats: true)
             startTime = Date.timeIntervalSinceReferenceDate
         }
         
@@ -100,7 +100,7 @@ class FakeViewController: UIViewController, FakeDataSource {
             verified = PeakVerify(peaks: peaks, verifiedPeaks: verified)
             
             var testWindow = verified
-            var testCase = peaks.count % 1000
+            var testCase = peaks.count % 2000
             if testCase == 0 {
                 var length = peaks.count-1
                 var indx = length - 999
@@ -108,16 +108,22 @@ class FakeViewController: UIViewController, FakeDataSource {
                 rate = HeartRate(peaks: testWindow)
                 counter = 0
                 
-                /*/ RESET
-                 data.removeAll(keepingCapacity: true)
-                 rate = Int()
-                 m = Double()
-                 s = Double()
-                 avg = Double()
-                 peaks.removeAll(keepingCapacity: true)
-                 SD = Double()
-                 verified.removeAll(keepingCapacity: true)
-                 */
+            }
+            /*/ RESET
+             data.removeAll(keepingCapacity: true)
+             rate = Int()
+             m = Double()
+             s = Double()
+             avg = Double()
+             peaks.removeAll(keepingCapacity: true)
+             SD = Double()
+             verified.removeAll(keepingCapacity: true)
+             */
+            
+            if data.count > 2000 {
+                data.removeFirst()
+                peaks.removeFirst()
+                verified.removeFirst()
             }
             
             fplotView.setNeedsDisplay()

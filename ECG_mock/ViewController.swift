@@ -203,6 +203,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             centralManager.cancelPeripheralConnection(SourceController.ECGsensor)
         }
     }
+  
+    
     
 }
 
