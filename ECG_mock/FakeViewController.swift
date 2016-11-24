@@ -109,16 +109,6 @@ class FakeViewController: UIViewController, FakeDataSource {
                 counter = 0
                 
             }
-            /*/ RESET
-             data.removeAll(keepingCapacity: true)
-             rate = Int()
-             m = Double()
-             s = Double()
-             avg = Double()
-             peaks.removeAll(keepingCapacity: true)
-             SD = Double()
-             verified.removeAll(keepingCapacity: true)
-             */
             
             if data.count > 2000 {
                 data.removeFirst()
@@ -138,33 +128,6 @@ class FakeViewController: UIViewController, FakeDataSource {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-/*
-    func plotfakeData(){
-    
-    var bytes = [UInt8](repeating: 0, count: dataReceived.count)
-    (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
-    
-    for index in 0...dataReceived.count/2-1 {
-    //                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
-    let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
-    // data.append(dataPoint) << Removed by Louie >>
-    (m, s, SD, data, peaks, avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
-    rate = HeartRate(peaks: peaks)
-    }
-    
-    plotView.setNeedsDisplay()
-}
- */
 
 func dataYforWidth(_ width: Int) -> [Int] {
     print(data)

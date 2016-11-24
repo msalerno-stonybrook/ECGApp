@@ -260,8 +260,6 @@ func PacketGeneration(v: Int) -> (packet:[Int], index: Int) {
         }
     }
     
-  //  displayDataLabel.text = "\(packet)"
-    
     return (packet, start)
     
 }

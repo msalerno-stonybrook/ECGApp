@@ -155,15 +155,6 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
                         testWindow = [Int](verified[indx...length])
                         rate = HeartRate(peaks: testWindow)
                         counter = 0
-                        
-                        /*/ RESET
-                        data.removeAll()
-                        m = Double()
-                        s = Double()
-                        avg = Double()
-                        peaks.removeAll()
-                        SD = Double()
-                        verified.removeAll() */
                     }
                 if data.count > 2000 {
                     data.removeFirst()

@@ -33,9 +33,9 @@ class FakePlotView: UIView {
             for i in start+1...dataLength-1 {
                 print("i \(i)")
                 let startPoint = CGFloat(dataArray![i-1])/20.0
-                path.move(to: CGPoint(x:CGFloat(i-start), y:viewHeigth/2.0-startPoint))
+                path.move(to: CGPoint(x:CGFloat(i-start), y:viewHeigth/1.5-startPoint))
                 let nextPoint = CGFloat(dataArray![i])/20.0
-                path.addLine(to: CGPoint(x:CGFloat(i-start+1), y:viewHeigth/2.0-nextPoint))
+                path.addLine(to: CGPoint(x:CGFloat(i-start+1), y:viewHeigth/1.5-nextPoint))
             }
             path.close()
             UIColor.red.setStroke()

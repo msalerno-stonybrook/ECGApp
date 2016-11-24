@@ -62,7 +62,6 @@ func IterativePeakFind (M: Double, S: Double, new: Int, avg: Double, dataSet: [I
 
 func PeakVerify (peaks: [Int], verifiedPeaks: [Int]) -> [Int] {
     let points = peaks.count
-    points
     var verified = verifiedPeaks
     if points < 2 { // Ignores first point
         verified.append(0)
