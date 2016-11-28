@@ -95,7 +95,7 @@ func HeartRate(peaks: [Int]) -> Int {
     if length < 999 { // WAIT
         rate = 0;
     }
-    else { // Calculates heart rate
+    else if points > 2 { // Calculates heart rate
         
         // Removes first "peak" marker, to give a clean window)
         var indx = (testData.index(of: 1)!) + 1
@@ -112,6 +112,9 @@ func HeartRate(peaks: [Int]) -> Int {
         }
         let averageGap = gaps.reduce(0,+) / gaps.count
         rate = 60000 / (averageGap * interval)
+    }
+    else {
+        rate = 1000
     }
     print(rate)
     return rate

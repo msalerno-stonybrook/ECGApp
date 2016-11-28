@@ -141,7 +141,9 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
             (dataReceived as NSData).getBytes(&bytes, length: dataReceived.count)
 
             for index in 0...dataReceived.count/2-1 {
+// Use the line below for Strey's ECG
 //                let dataPoint = Int(bytes[index*2])/16+(Int(bytes[index*2+1]) & 255)*16
+// Use the line below for Simblee and fake data generator
                 let dataPoint = Int(bytes[index*2])+(Int(bytes[index*2+1]) & 255)*256
                 // data.append(dataPoint) << Removed by Louie >>
                 (M2: m, S2: s, dataSet2: data, newPeaks: peaks, movingAverage: avg) = IterativePeakFind(M: m, S: s, new: dataPoint, avg: avg, dataSet: data, peaks: peaks)
@@ -151,7 +153,7 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
                     var testCase = peaks.count % 2000
                     if testCase == 0 {
                         var length = peaks.count-1
-                        var indx = length - 999
+                        var indx = length - 1999
                         testWindow = [Int](verified[indx...length])
                         rate = HeartRate(peaks: testWindow)
                         rate_track.append(rate)
