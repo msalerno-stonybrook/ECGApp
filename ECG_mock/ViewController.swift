@@ -20,7 +20,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var BLEdevices = [CBPeripheral]()
     var refreshTimer: Timer?
     // This needs to be adjusted to use the fake data generator
-    var fakeData = false
+    var fakeData = true
     
     override func viewDidLoad() {
         super.viewDidLoad()

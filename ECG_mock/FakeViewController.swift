@@ -29,6 +29,7 @@ class FakeViewController: UIViewController, FakeDataSource {
     //data.reserveCapacity(1000)
 
     var rate = Int()
+    var rate_track = [Int]()
     var m = Double()
     var s = Double()
     var avg = Double()
@@ -103,18 +104,19 @@ class FakeViewController: UIViewController, FakeDataSource {
             var testCase = peaks.count % 2000
             if testCase == 0 {
                 var length = peaks.count-1
-                var indx = length - 999
+                var indx = length - 1999
                 testWindow = [Int](verified[indx...length])
                 rate = HeartRate(peaks: testWindow)
+                rate_track.append(rate)
                 counter = 0
                 
             }
             
-            if data.count > 2000 {
+            /* if data.count > 2000 {
                 data.removeFirst()
                 peaks.removeFirst()
                 verified.removeFirst()
-            }
+            } */
             
             fplotView.setNeedsDisplay()
         }
