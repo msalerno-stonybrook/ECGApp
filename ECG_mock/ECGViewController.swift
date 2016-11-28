@@ -21,12 +21,12 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
     let CharacteristicsList = [CBUUID(string:"C7BC60E0-31B5-11E3-9389-0002A5D5C51B"),CBUUID(string:"4585C102-7784-40B4-88E1-3CB5C4FD37A3"), CBUUID(string:"2D30C082-F39F-4CE6-923F-3484EA480596")]
     
     // Begin heart rate analysis
-    // Begin heart rate analysis
     var data = [Int]()
 
     //data.reserveCapacity(1000)
     
     var rate = Int()
+    var rate_track = [Int]()
     var m = Double()
     var s = Double()
     var avg = Double()
@@ -154,13 +154,16 @@ class ECGViewController: UIViewController, CBPeripheralDelegate, CBCentralManage
                         var indx = length - 999
                         testWindow = [Int](verified[indx...length])
                         rate = HeartRate(peaks: testWindow)
+                        rate_track.append(rate)
                         counter = 0
                     }
-                if data.count > 2000 {
+                
+                // Probably don't need this, used for speed
+                /* if data.count > 2000 {
                     data.removeFirst()
                     peaks.removeFirst()
                     verified.removeFirst()
-                }
+                } */
                     
 
                 
